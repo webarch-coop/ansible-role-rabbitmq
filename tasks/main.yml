@@ -1,0 +1,9 @@
+---
+- name: RabbitMQ packages present
+  apt:
+    pkg:
+      - rabbitmq-server
+    state: present
+  tags:
+    - rabbitmq
+...
