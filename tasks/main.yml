@@ -10,7 +10,7 @@
 - name: RabbitMQ user present
   include_tasks: user.yml
   when:
-    - ( rabbitmq_ user is defined )
+    - ( rabbitmq_user is defined )
     - ( rabbitmq_user | length > 0 )
   tags:
     - rabbitmq
