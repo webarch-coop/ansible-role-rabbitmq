@@ -3,10 +3,10 @@
   block:
 
     - name: Include password tasks
-      include_tasks: password.yml
+      ansible.builtin.include_tasks: password.yml
 
     - name: RabbitMQ user present
-      rabbitmq_user:
+      community.rabbitmq.rabbitmq_user:
         user: "{{ rabbitmq_user }}"
         password: "{{ rabbitmq_password }}"
         update_password: always

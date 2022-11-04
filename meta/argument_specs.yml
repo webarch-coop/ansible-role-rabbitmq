@@ -1,0 +1,16 @@
+---
+argument_specs:
+  main:
+    author: Chris Croome
+    description: Ansible role to install RabbitMQ on Debian.
+    short_description: The main entry point for the RabbitMQ role.
+    options:
+      rabbitmq:
+        type: bool
+        required: true
+        description: Run the tasks in this role.
+      rabbitmq_user:
+        type: str
+        required: false
+        description: RabbitMQ username.
+...

@@ -1,17 +1,20 @@
 ---
-- name: RabbitMQ packages present
-  apt:
-    pkg:
-      - rabbitmq-server
-    state: present
-  tags:
-    - rabbitmq
+- name: Install RabbitMQ
+  block:
 
-- name: RabbitMQ user present
-  include_tasks: user.yml
-  when:
-    - ( rabbitmq_user is defined )
-    - ( rabbitmq_user | length > 0 )
+    - name: RabbitMQ packages present
+      ansible.builtin.apt:
+        pkg:
+          - rabbitmq-server
+        state: present
+
+    - name: RabbitMQ user present
+      ansible.builtin.include_tasks: user.yml
+      when:
+        - (rabbitmq_user is defined)
+        - (rabbitmq_user | length > 0)
+
+  when: rabbitmq | bool
   tags:
     - rabbitmq
 ...
