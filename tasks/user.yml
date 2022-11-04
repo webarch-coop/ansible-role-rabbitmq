@@ -11,6 +11,7 @@
         password: "{{ rabbitmq_password }}"
         update_password: always
         vhost: /
+        node: "rabbit@{{ inventory_hostname }}"
         configure_priv: .*
         read_priv: .*
         write_priv: .*
