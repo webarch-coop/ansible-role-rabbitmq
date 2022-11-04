@@ -1,4 +1,4 @@
 ---
 rabbitmq: false
-rabbitmq_node_name: "rabbit@{{ ansible_hostname }}"
+rabbitmq_node_name: localhost
 ...
