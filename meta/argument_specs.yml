@@ -13,4 +13,8 @@ argument_specs:
         type: str
         required: false
         description: RabbitMQ username.
+      rabbitmq_node_name:
+        type: str
+        required: false
+        description: RabbitMQ NODENAME.
 ...
