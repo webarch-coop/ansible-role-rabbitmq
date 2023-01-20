@@ -7,7 +7,7 @@
 
     - name: RabbitMQ user present
       community.rabbitmq.rabbitmq_user:
-        user: "{{ rabbitmq_user }}"
+        user: "{{ rabbitmq_user }}@{{ rabbitmq_node_name }}"
         password: "{{ rabbitmq_password }}"
         update_password: always
         vhost: /
