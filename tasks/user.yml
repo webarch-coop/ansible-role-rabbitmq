@@ -7,11 +7,14 @@
 
     - name: RabbitMQ user present
       community.rabbitmq.rabbitmq_user:
-        user: "{{ rabbitmq_user }}@{{ rabbitmq_node_name }}"
+        user: "{{ rabbitmq_user }}"
         password: "{{ rabbitmq_password }}"
         update_password: always
         vhost: /
-        node: "{{ rabbitmq_node_name }}"
+        node: "rabbit@{{ rabbitmq_node_name }}"
+        # node: "rabbit@localhost"
+        # node: "rabbit@{{ inventory_hostname }}"
+        # node: "rabbit@{{ inventory_hostname_short }}"
         configure_priv: .*
         read_priv: .*
         write_priv: .*
