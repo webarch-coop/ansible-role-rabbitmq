@@ -72,8 +72,4 @@ argument_specs:
         type: str
         required: true
         description: The RabbitMQ username to set / read a password for.
-      rabbitmq_password:
-        type: str
-        required: false
-        description: An internal variables for the RabbitMQ password.
 ...

@@ -11,13 +11,18 @@
 - name: RabbitMQ user present
   block:
 
+    - name: Debug RabbitMQ user
+      ansible.builtin.debug:
+        var: rabbitmq_user.username
+        verbosity: 2
+
     - name: RabbitMQ user present
       block:
 
         - name: Include password tasks
           ansible.builtin.include_tasks: password.yml
           vars:
-            rabbilmq_username: "{{ rabbitmq_user.username }}"
+            rabbitmq_username: "{{ rabbitmq_user.username }}"
 
         - name: RabbitMQ user present
           community.rabbitmq.rabbitmq_user:
