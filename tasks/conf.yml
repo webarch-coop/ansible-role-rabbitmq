@@ -1,0 +1,62 @@
+# Copyright 2020-2023 Chris Croome
+#
+# This file is part of the Webarchitects RabbitMQ role.
+#
+# The Webarchitects RabbitMQ role is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# The Webarchitects RabbitMQ role is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with the Webarchitects RabbitMQ role. If not, see <https://www.gnu.org/licenses/>.
+---
+- name: RabbitMQ configured
+  block:
+
+    - name: RabbitMQ configuration
+      community.general.ini_file:
+        path: /etc/rabbitmq/rabbitmq.conf
+        create: true
+        mode: "0644"
+        owner: rabbitmq
+        group: rabbitmq
+        section: null
+        option: "{{ rabbitmq_conf.key }}"
+        value: "{{ rabbitmq_conf.value }}"
+      loop: "{{ rabbitmq_configuration | dict2items }}"
+      loop_control:
+        loop_var: rabbitmq_conf
+        label: "{{ rabbitmq_conf.key }}"
+      notify: Restart rabbitmq
+
+    - name: Check if the RabbitMQ configuration file exists
+      ansible.builtin.stat:
+        path: /etc/rabbitmq/rabbitmq.conf
+      register: rabbitmq_conf_file_check
+
+    - name: First and last lines present in the RabbitMQ configuration file
+      block:
+
+        - name: Ansible managed comment present at the top of the file
+          ansible.builtin.lineinfile:
+            path: /etc/rabbitmq/rabbitmq.conf
+            line: "# Ansible managed"
+            state: present
+            insertbefore: BOF
+            mode: "0644"
+            owner: rabbitmq
+            group: rabbitmq
+
+        - name: Vim syntaxhighlighting modeline present at the end of the file
+          ansible.builtin.lineinfile:
+            path: /etc/rabbitmq/rabbitmq.conf
+            line: "# vim: syntax=dosini"
+            state: present
+            insertafter: EOF
+            mode: "0644"
+            owner: rabbitmq
+            group: rabbitmq
+
+      when: rabbitmq_conf_file_check.stat.exists | bool
+
+  tags:
+    - rabbitmq
+...

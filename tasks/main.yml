@@ -1,18 +1,36 @@
+# Copyright 2020-2023 Chris Croome
+#
+# This file is part of the Webarchitects RabbitMQ role.
+#
+# The Webarchitects RabbitMQ role is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# The Webarchitects RabbitMQ role is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with the Webarchitects RabbitMQ role. If not, see <https://www.gnu.org/licenses/>.
 ---
 - name: Install RabbitMQ
   block:
 
-    - name: RabbitMQ packages present
+    - name: RabbitMQ packages
       ansible.builtin.apt:
         pkg:
           - rabbitmq-server
         state: present
 
-    - name: RabbitMQ user present
+    - name: RabbitMQ configuration
+      ansible.builtin.include_tasks: conf.yml
+      when: rabbitmq_configuration is defined
+
+    - name: RabbitMQ users
       ansible.builtin.include_tasks: user.yml
-      when:
-        - (rabbitmq_user is defined)
-        - (rabbitmq_user | length > 0)
+      loop: "{{ rabbitmq_users }}"
+      loop_control:
+        loop_var: rabbitmq_user
+        label: "{{ rabbitmq_user.username }}"
+      when: rabbitmq_users is defined
+
+    - name: RabbitMQ checks
+      ansible.builtin.include_tasks: checks.yml
 
   when: rabbitmq | bool
   tags:

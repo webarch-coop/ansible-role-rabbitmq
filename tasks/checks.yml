@@ -1,0 +1,90 @@
+# Copyright 2020-2023 Chris Croome
+#
+# This file is part of the Webarchitects RabbitMQ role.
+#
+# The Webarchitects RabbitMQ role is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# The Webarchitects RabbitMQ role is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with the Webarchitects RabbitMQ role. If not, see <https://www.gnu.org/licenses/>.
+---
+- name: RabbitMQ check tasks
+  block:
+
+    - name: Debug the hostvars variable names that start with rabbitmq_
+      ansible.builtin.debug:
+        var: rabbitmqvarnames
+        verbosity: "{% if ansible_check_mode | bool %}3{% else %}4{% endif %}"
+
+    - name: Debug the hostvars variable names that start with rabbitmq_
+      ansible.builtin.debug:
+        var: rabbitmqhostvars
+        verbosity: "{% if ansible_check_mode | bool %}3{% else %}4{% endif %}"
+
+    - name: Check rabbitmq_ variables using meta/argument_specs.yml
+      ansible.builtin.validate_argument_spec:
+        argument_spec: "{{ (lookup('ansible.builtin.file', 'meta/argument_specs.yml') | from_yaml)['argument_specs']['main']['options'] }}"
+        provided_arguments: "{{ rabbitmqhostvars }}"
+
+    - name: Check RabbitMQ cluster status
+      ansible.builtin.command: rabbitmq-diagnostics cluster_status --formatter=json
+      check_mode: false
+      changed_when: false
+      register: rabbitmq_cluster_status_check
+
+    - name: Set a fact for rabbitmq-diagnostics cluster_status
+      ansible.builtin.set_fact:
+        rabbitmq_cluster_status: "{{ rabbitmq_cluster_status_check.stdout | from_json }}"
+
+    - name: Debug rabbitmq_cluster_status
+      ansible.builtin.debug:
+        var: rabbitmq_cluster_status
+        verbosity: 2
+
+    - name: Debug rabbitmq_cluster_status.listeners
+      ansible.builtin.debug:
+        var: rabbitmq_cluster_status.listeners
+        verbosity: 1
+
+    - name: Set a fact for the RabbitMQ node names
+      ansible.builtin.set_fact:
+        rabbitmq_node_names: "{{ rabbitmq_cluster_status.listeners | dict2items | community.general.json_query('[].key') }}"
+
+    - name: Debug rabbitmq_node_names
+      ansible.builtin.debug:
+        var: rabbitmq_node_names
+        verbosity: 1
+
+    - name: Check RabbitMQ environment
+      ansible.builtin.command: rabbitmq-diagnostics environment --formatter=json
+      check_mode: false
+      changed_when: false
+      register: rabbitmq_environment_check
+
+    - name: Set a fact for rabbitmq-diagnostics environment
+      ansible.builtin.set_fact:
+        rabbitmq_environment: "{{ rabbitmq_environment_check.stdout | from_json }}"
+
+    - name: Debug rabbitmq_environment
+      ansible.builtin.debug:
+        var: rabbitmq_environment
+        verbosity: 2
+
+    - name: Check RabbitMQ users
+      ansible.builtin.command: rabbitmqctl list_users --formatter=json
+      check_mode: false
+      changed_when: false
+      register: rabbitmq_list_users_check
+
+    - name: Set a fact for rabbitmqctl list_users
+      ansible.builtin.set_fact:
+        rabbitmq_list_users: "{{ rabbitmq_list_users_check.stdout | from_json }}"
+
+    - name: Debug rabbitmq_list_users
+      ansible.builtin.debug:
+        var: rabbitmq_list_users
+        verbosity: 1
+
+  tags:
+    - rabbitmq
+...

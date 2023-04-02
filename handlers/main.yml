@@ -8,23 +8,9 @@
 #
 # You should have received a copy of the GNU General Public License along with the Webarchitects RabbitMQ role. If not, see <https://www.gnu.org/licenses/>.
 ---
-galaxy_info:
-  role_name: rabbitmq
-  author: Chris Croome
-  namespace: chriscroome
-  description: Ansible role for installing RabbitMQ
-  company: Webarchitects Co-operative
-  license: GNU General Public License v3.0 (GPLv3)
-  min_ansible_version: "2.10.7"
-  platforms:
-    - name: Debian
-      versions:
-        - bookworm
-        - bullseye
-  galaxy_tags:
-    - debian
-    - rabbitmq
-dependencies: []
-# List your role dependencies here, one per line. Be sure to remove the '[]' above,
-# if you add dependencies to this list.
+- name: Restart rabbitmq
+  ansible.builtin.service:
+    name: rabbitmq-server
+    state: restarted
+  listen: Restart rabbitmq
 ...
