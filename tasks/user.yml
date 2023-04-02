@@ -16,6 +16,8 @@
 
         - name: Include password tasks
           ansible.builtin.include_tasks: password.yml
+          vars:
+            rabbilmq_username: "{{ rabbitmq_user.username }}"
 
         - name: RabbitMQ user present
           community.rabbitmq.rabbitmq_user:

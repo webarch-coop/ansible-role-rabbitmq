@@ -38,6 +38,10 @@ argument_specs:
         type: str
         required: false
         description: The internal path to the password file for the RabbitMQ user being configured.
+      rabbitmq_username:
+        type: str
+        required: false
+        description: An internal loop variable for the RabbitMQ username.
       rabbitmq_users:
         type: list
         elements: dict
@@ -59,4 +63,17 @@ argument_specs:
         type: bool
         required: true
         description: Use ansible.builtin.validate_argument_spec module to validate role argument specs.
+  password:
+    author: Chris Croome
+    description: Ansible role to install RabbitMQ on Debian.
+    short_description: The password entry point for the RabbitMQ role.
+    options:
+      rabbitmq_username:
+        type: str
+        required: true
+        description: The RabbitMQ username to set / read a password for.
+      rabbitmq_password:
+        type: str
+        required: false
+        description: An internal variables for the RabbitMQ password.
 ...
