@@ -26,6 +26,14 @@ rabbitmq_configuration:
 
 A optional dictionary of users for the [community.rabbitmq.rabbitmq_user module](https://docs.ansible.com/ansible/latest/collections/community/rabbitmq/rabbitmq_user_module.html), currently this only support two list options, `name` and `state`. For users that are listed as `present` a random password will be generated and written to `/root/.rabbitmq.$USER.passwd`.
 
+By default this role removes the `guest` role:
+
+```yaml
+rabbitmq_users:
+  - name: guest
+    state: absent
+```
+
 #### name
 
 The name of the RabbitMQ user.
