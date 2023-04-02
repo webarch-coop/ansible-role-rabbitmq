@@ -11,21 +11,6 @@
 - name: RabbitMQ check tasks
   block:
 
-    - name: Debug the hostvars variable names that start with rabbitmq_
-      ansible.builtin.debug:
-        var: rabbitmqvarnames
-        verbosity: "{% if ansible_check_mode | bool %}3{% else %}4{% endif %}"
-
-    - name: Debug the hostvars variable names that start with rabbitmq_
-      ansible.builtin.debug:
-        var: rabbitmqhostvars
-        verbosity: "{% if ansible_check_mode | bool %}3{% else %}4{% endif %}"
-
-    - name: Check rabbitmq_ variables using meta/argument_specs.yml
-      ansible.builtin.validate_argument_spec:
-        argument_spec: "{{ (lookup('ansible.builtin.file', 'meta/argument_specs.yml') | from_yaml)['argument_specs']['main']['options'] }}"
-        provided_arguments: "{{ rabbitmqhostvars }}"
-
     - name: Check RabbitMQ cluster status
       ansible.builtin.command: rabbitmq-diagnostics cluster_status --formatter=json
       check_mode: false

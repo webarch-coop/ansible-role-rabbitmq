@@ -55,4 +55,8 @@ argument_specs:
             choices:
               - absent
               - present
+      rabbitmq_validate:
+        type: bool
+        required: true
+        description: Use ansible.builtin.validate_argument_spec module to validate role argument specs.
 ...

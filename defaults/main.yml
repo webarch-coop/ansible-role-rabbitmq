@@ -15,4 +15,5 @@ rabbitmq_configuration:
 rabbitmq_users:
   - name: guest
     state: absent
+rabbitmq_validate: true
 ...

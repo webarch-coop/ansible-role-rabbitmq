@@ -24,7 +24,7 @@ rabbitmq_configuration:
 
 ### rabbitmq_users
 
-A optional dictionary of users for the [community.rabbitmq.rabbitmq_user module](https://docs.ansible.com/ansible/latest/collections/community/rabbitmq/rabbitmq_user_module.html), currently this only support two list options, `name` and `state`. For users that are listed as `present` a random password will be generated and written to `/root/.rabbitmq.$USER.passwd`.
+A optional list of dictionary of users for the [community.rabbitmq.rabbitmq_user module](https://docs.ansible.com/ansible/latest/collections/community/rabbitmq/rabbitmq_user_module.html), currently this only support two list options, `name` and `state`. For users that are listed as `present` a random password will be generated and written to `/root/.rabbitmq.$USER.passwd`.
 
 By default this role removes the `guest` role:
 
@@ -41,6 +41,10 @@ The name of the RabbitMQ user.
 #### state
 
 The state of the RabbitMQ user, `absent` or `present`.
+
+### rabbitmq_validate
+
+A boolean, which defaults to `true`, set `rabbitmq_validate` to `false` to skip using the [ansible.builtin.validate_argument_spec module](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/validate_argument_spec_module.html) to validate variables that start with `rabbitmq_`.
 
 ## Repository
 
