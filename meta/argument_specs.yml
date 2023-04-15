@@ -26,6 +26,15 @@ argument_specs:
         type: dict
         required: false
         description: A dictionary of RabbitMQ configuration file options.
+      rabbitmq_etchosts:
+        type: bool
+        required: false
+        description: Use the /etc/hosts role to template the /etc/hosts file.
+      rabbitmq_etchosts_file:
+        type: list
+        elements: dict
+        required: false
+        description: Configuration for the /etc/hosts role.
       rabbitmq_password:
         type: str
         required: false
@@ -34,6 +43,15 @@ argument_specs:
         type: str
         required: false
         description: The base64 internal password for the RabbitMQ user being configured.
+      rabbitmq_systemd:
+        type: bool
+        required: false
+        description: Use the systemd role to configure systemd unit files.
+      rabbitmq_systemd_units:
+        type: list
+        elements: dict
+        required: false
+        description: Configuration for the systemd role.
       rabbitmq_user_password_file:
         type: str
         required: false

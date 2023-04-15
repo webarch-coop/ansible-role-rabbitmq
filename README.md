@@ -22,6 +22,14 @@ rabbitmq_configuration:
   "listeners.tcp.local_v6": "::1:5672"
 ```
 
+### rabbitmq_etc_hosts
+
+A boolean, when `true` template the `/etc/hosts` file using the [/etc/hosts role](https://git.coop/webarch/etchosts).
+
+### rabbitmq_systemd_units
+
+A dictionary to be used with the [systemd role](https://git.coop/webarch/systemd).
+
 ### rabbitmq_users
 
 A optional list of dictionary of users for the [community.rabbitmq.rabbitmq_user module](https://docs.ansible.com/ansible/latest/collections/community/rabbitmq/rabbitmq_user_module.html), currently this only support two list options, `username` and `state`. For users that are listed as `present` a random password will be generated and written to `/root/.rabbitmq.$USER.passwd`.

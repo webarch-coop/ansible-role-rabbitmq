@@ -12,6 +12,29 @@ rabbitmq: false
 rabbitmq_configuration:
   "listeners.tcp.local": "127.0.0.1:5672"
   "listeners.tcp.local_v6": "::1:5672"
+  "listeners.tcp.1": "127.0.0.1:5672"
+  "listeners.tcp.2": "::1:5672"
+rabbitmq_etchosts: true
+rabbitmq_etchosts_file:
+  - ip: 127.0.0.1
+    hostname:
+      - localhost
+      - "{{ inventory_hostname_short }}"
+  - ip: "{{ ansible_default_ipv4.address }}"
+    hostname:
+      - "{{ inventory_hostname }}"
+  - ip: ::1
+    hostname:
+      - ip6-localhost
+      - ip6-loopback
+rabbitmq_systemd: true
+rabbitmq_systemd_units:
+  - name: epmd.service
+    files:
+      - path: /etc/systemd/system/epmd.service.d/override.conf
+        conf:
+          Service:
+            Environment: 'ERL_EPMD_ADDRESS="::1,127.0.0.1"'
 rabbitmq_users:
   - username: guest
     state: absent
