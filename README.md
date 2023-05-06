@@ -22,10 +22,6 @@ rabbitmq_configuration:
   "listeners.tcp.local_v6": "::1:5672"
 ```
 
-### rabbitmq_etc_hosts
-
-A boolean, when `true` template the `/etc/hosts` file using the [/etc/hosts role](https://git.coop/webarch/etchosts).
-
 ### rabbitmq_systemd_units
 
 A dictionary to be used with the [systemd role](https://git.coop/webarch/systemd).

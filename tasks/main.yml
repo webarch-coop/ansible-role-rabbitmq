@@ -24,32 +24,6 @@
         ( ansible_local.gpg.version is not defined ) or
         ( ansible_local.bash.path is not defined )
 
-    - name: Include the /etc/hosts role
-      ansible.builtin.include_role:
-        name: etchosts
-      vars:
-        etchosts: true
-        etchosts_file: "{{ rabbitmq_etchosts_file }}"
-      when:
-        - rabbitmq_etchosts is defined
-        - rabbitmq_etchosts | bool
-        - rabbitmq_etchosts_file is defined
-        - rabbitmq_etchosts_file != []
-
-    - name: Include the systemd role
-      ansible.builtin.include_role:
-        name: systemd
-        tasks_from: unit_present.yml
-      loop: "{{ rabbitmq_systemd_units }}"
-      loop_control:
-        loop_var: systemd_unit
-        label: "{{ systemd_unit.name }}"
-      when:
-        - rabbitmq_systemd is defined
-        - rabbitmq_systemd | bool
-        - rabbitmq_systemd_units is defined
-        - rabbitmq_systemd_units != []
-
     - name: RabbitMQ packages
       ansible.builtin.apt:
         pkg:
@@ -67,6 +41,20 @@
         loop_var: rabbitmq_user
         label: "{{ rabbitmq_user.username }}"
       when: rabbitmq_users is defined
+
+    - name: Include the systemd role
+      ansible.builtin.include_role:
+        name: systemd
+        tasks_from: unit_present.yml
+      loop: "{{ rabbitmq_systemd_units }}"
+      loop_control:
+        loop_var: systemd_unit
+        label: "{{ systemd_unit.name }}"
+      when:
+        - rabbitmq_systemd is defined
+        - rabbitmq_systemd | bool
+        - rabbitmq_systemd_units is defined
+        - rabbitmq_systemd_units != []
 
     - name: RabbitMQ checks
       ansible.builtin.include_tasks: checks.yml

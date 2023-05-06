@@ -26,15 +26,6 @@ argument_specs:
         type: dict
         required: false
         description: A dictionary of RabbitMQ configuration file options.
-      rabbitmq_etchosts:
-        type: bool
-        required: false
-        description: Use the /etc/hosts role to template the /etc/hosts file.
-      rabbitmq_etchosts_file:
-        type: list
-        elements: dict
-        required: false
-        description: Configuration for the /etc/hosts role.
       rabbitmq_password:
         type: str
         required: false
