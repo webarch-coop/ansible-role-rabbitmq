@@ -10,7 +10,8 @@
 ---
 rabbitmq: false
 rabbitmq_configuration:
-  "listeners.tcp.1": "127.0.0.1:5672"
+  listeners.tcp.local: "127.0.0.1:5672"
+  listeners.tcp.local_v6: "::1:5672"
 rabbitmq_systemd: true
 rabbitmq_systemd_units:
   - name: epmd.service
