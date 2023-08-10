@@ -18,7 +18,7 @@
         mode: "0644"
         owner: rabbitmq
         group: rabbitmq
-        section: null
+        section: ""
         option: "{{ rabbitmq_conf.key | quote }}"
         value: "{{ rabbitmq_conf.value | quote }}"
       loop: "{{ rabbitmq_configuration | dict2items }}"
