@@ -19,8 +19,8 @@
         owner: rabbitmq
         group: rabbitmq
         section: null
-        option: "{{ rabbitmq_conf.key }}"
-        value: "{{ rabbitmq_conf.value }}"
+        option: "{{ rabbitmq_conf.key | quote }}"
+        value: "{{ rabbitmq_conf.value | quote }}"
       loop: "{{ rabbitmq_configuration | dict2items }}"
       loop_control:
         loop_var: rabbitmq_conf
