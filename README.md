@@ -50,6 +50,10 @@ The state of the RabbitMQ user, `absent` or `present`.
 
 A boolean, which defaults to `true`, set `rabbitmq_validate` to `false` to skip using the [ansible.builtin.validate_argument_spec module](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/validate_argument_spec_module.html) to validate variables that start with `rabbitmq_`.
 
+## Notes
+
+Changing the hostname of a server will caused RabbitMQ to fail, see [this thread](https://stackoverflow.com/a/31977791).
+
 ## Repository
 
 The primary URL of this repo is [`https://git.coop/webarch/rabbitmq`](https://git.coop/webarch/rabbitmq) however it is also [mirrored to GitHub](https://github.com/webarch-coop/ansible-role-rabbitmq) and [available via Ansible Galaxy](https://galaxy.ansible.com/chriscroome/rabbitmq).
@@ -61,6 +65,3 @@ If you use this role please use a tagged release, see [the release notes](https:
 Copyright 2020-2023 Chris Croome, &lt;[chris@webarchitects.co.uk](mailto:chris@webarchitects.co.uk)&gt;.
 
 This role is released under [the same terms as Ansible itself](https://github.com/ansible/ansible/blob/devel/COPYING), the [GNU GPLv3](LICENSE).
-
-
-
