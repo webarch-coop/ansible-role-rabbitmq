@@ -28,6 +28,9 @@
       ansible.builtin.debug:
         var: ansible_user_dir
 
+    - name: Gather facts
+      ansible.builtin.setup:
+
     - name: Include RabbitMQ role as root
       ansible.builtin.include_role:
         name: rabbitmq
