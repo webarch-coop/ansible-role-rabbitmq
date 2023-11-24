@@ -8,6 +8,11 @@
 #
 # You should have received a copy of the GNU General Public License along with the Webarchitects RabbitMQ role. If not, see <https://www.gnu.org/licenses/>.
 ---
+- name: etchosts
+  src: https://git.coop/webarch/etchosts.git
+  version: 1.3.0  # etchosts
+  scm: git
+
 - name: systemd
   src: https://git.coop/webarch/systemd.git
   version: 2.0.2  # systemd

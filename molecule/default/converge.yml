@@ -31,6 +31,12 @@
     - name: Gather facts
       ansible.builtin.setup:
 
+    - name: Include /etc/hosts role as root
+      ansible.builtin.include_role:
+        name: etchosts
+      vars:  # noqa var-naming[no-role-prefix]
+        etchosts: true
+
     - name: Include RabbitMQ role as root
       ansible.builtin.include_role:
         name: rabbitmq
