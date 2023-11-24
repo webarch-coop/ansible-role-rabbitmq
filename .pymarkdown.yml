@@ -8,23 +8,7 @@
 #
 # You should have received a copy of the GNU General Public License along with the Webarchitects RabbitMQ role. If not, see <https://www.gnu.org/licenses/>.
 ---
-dependency:
-  name: galaxy
-platforms:
-  - name: instance
-provisioner:
-  name: ansible
-  config_options:
-    defaults:
-      ansible_managed: Ansible managed
-    # host_vars:
-    #   instance:
-    #     ansible_user: ansible
-  options:
-    D: true
-verifier:
-  name: ansible
-    # host_vars:
-    #   instance:
-    #     ansible_user: ansible
+plugins:
+  md013:
+    enabled: false
 ...
