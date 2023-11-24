@@ -11,4 +11,8 @@
 # https://docs.ansible.com/ansible/latest/playbook_guide/complex_data_manipulation.html
 rabbitmqvarnames: "{{ q('varnames', '^rabbitmq_') | sort }}"
 rabbitmqhostvars: "{{ dict(rabbitmqvarnames | list | zip(q('vars', *rabbitmqvarnames))) }}"
+
+# JMESPath queries
+rabbitmq_jpq:
+  service: 'ansible_facts.services.["rabbitmq-server.service"]|[0]'
 ...

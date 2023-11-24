@@ -28,7 +28,29 @@
       ansible.builtin.apt:
         pkg:
           - rabbitmq-server
+        update_cache: true
         state: present
+      notify: Restart rabbitmq
+
+    - name: Stat /lib/systemd/system/rabbitmq-server.service
+      ansible.builtin.stat:
+        path: /lib/systemd/system/rabbitmq-server.service
+      register: rabbitmq_system_service
+
+    - name: Stat /etc/systemd/system/multi-user.target.wants/rabbitmq-server.service
+      ansible.builtin.stat:
+        path: /etc/systemd/system/multi-user.target.wants/rabbitmq-server.service
+      register: rabbitmq_system_service_symlink
+
+    - name: RabbitMQ enabled and started
+      ansible.builtin.systemd_service:
+        name: rabbitmq-server
+        enabled: true
+        state: started
+      register: rabbitmq_service
+      when:
+        - rabbitmq_system_service.stat.exists | bool
+        - rabbitmq_system_service_symlink.stat.exists | bool
 
     - name: RabbitMQ configuration
       ansible.builtin.include_tasks: conf.yml
