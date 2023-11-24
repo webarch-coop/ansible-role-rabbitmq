@@ -11,6 +11,34 @@
 - name: RabbitMQ check tasks
   block:
 
+    - name: Gather facts on listening ports
+      community.general.listen_ports_facts:
+      register: rabbitmq_port_facts
+
+    - name: Debug RabbitMQ listening ports
+      ansible.builtin.debug:
+        var: rabbitmq_port_facts
+
+    - name: Gather service facts
+      ansible.builtin.service_facts:
+      register: rabbitmq_service_facts
+
+    - name: Debug RabbitMQ service status
+      ansible.builtin.debug:
+        msg: "{{ rabbitmq_service_facts | community.general.json_query(rabbitmq_service_jpq) }}"
+        verbosity: 3
+      vars:
+        rabbitmq_service_jpq: 'ansible_facts.services.["rabbitmq-server.service"]|[0]'
+
+    - name: Check that RabbitMQ is enabled and running
+      ansible.builtin.assert:
+        that:
+          - (rabbitmq_service_facts | community.general.json_query(rabbitmq_service_jpq)).status == "enabled"
+          - (rabbitmq_service_facts | community.general.json_query(rabbitmq_service_jpq)).state == "running"
+        quiet: true
+      vars:
+        rabbitmq_service_jpq: 'ansible_facts.services.["rabbitmq-server.service"]|[0]'
+
     - name: Check RabbitMQ cluster status
       ansible.builtin.command: rabbitmq-diagnostics cluster_status --formatter=json
       check_mode: false
