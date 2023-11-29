@@ -10,7 +10,7 @@
 ---
 - name: etchosts
   src: https://git.coop/webarch/etchosts.git
-  version: main  # etchosts
+  version: 1.4.0  # etchosts
   scm: git
 
 - name: systemd
