@@ -89,6 +89,11 @@
       changed_when: false
       register: rabbitmq_list_users_check
 
+    - name: Debug rabbitmq_list_users
+      ansible.builtin.debug:
+        var: rabbitmq_list_users_check
+        verbosity: 1
+
     - name: Set a fact for rabbitmqctl list_users
       ansible.builtin.set_fact:
         rabbitmq_list_users: "{{ rabbitmq_list_users_check.stdout | from_json }}"
