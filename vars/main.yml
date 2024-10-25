@@ -14,5 +14,6 @@ rabbitmqhostvars: "{{ dict(rabbitmqvarnames | list | zip(q('vars', *rabbitmqvarn
 
 # JMESPath queries
 rabbitmq_jpq:
-  service: 'ansible_facts.services.["rabbitmq-server.service"]|[0]'
+  ports: '[?user="rabbitmq"]'
+  service: '["rabbitmq-server.service"]|[0]'
 ...

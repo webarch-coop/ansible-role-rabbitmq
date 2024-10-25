@@ -11,33 +11,36 @@
 - name: RabbitMQ check tasks
   block:
 
-    - name: Gather facts on listening ports
+    - name: Gather listening ports facts
       community.general.listen_ports_facts:
-      register: rabbitmq_port_facts
 
-    - name: Debug RabbitMQ listening ports
+    - name: Set a fact for the RabbitMQ listening ports list
+      ansible.builtin.set_fact:
+        rabbitmq_ports: "{{ ansible_facts.tcp_listen | community.general.json_query(rabbitmq_jpq.ports) }}"
+
+    - name: Debug RabbitMQ listening ports list
       ansible.builtin.debug:
-        var: rabbitmq_port_facts
+        var: rabbitmq_ports
+        verbosity: "{% if ansible_check_mode | bool or ansible_diff_mode | bool %}0{% else %}1{% endif %}"
 
     - name: Gather service facts
       ansible.builtin.service_facts:
-      register: rabbitmq_service_facts
+
+    - name: Set a fact for the RabbitMQ service status
+      ansible.builtin.set_fact:
+        rabbitmq_status: "{{ ansible_facts.services | community.general.json_query(rabbitmq_jpq.service) }}"
 
     - name: Debug RabbitMQ service status
       ansible.builtin.debug:
-        msg: "{{ rabbitmq_service_facts | community.general.json_query(rabbitmq_service_jpq) }}"
-        verbosity: 3
-      vars:
-        rabbitmq_service_jpq: 'ansible_facts.services.["rabbitmq-server.service"]|[0]'
+        var: rabbitmq_service
+        verbosity: "{% if ansible_check_mode | bool or ansible_diff_mode | bool %}0{% else %}1{% endif %}"
 
     - name: Check that RabbitMQ is enabled and running
       ansible.builtin.assert:
         that:
-          - (rabbitmq_service_facts | community.general.json_query(rabbitmq_service_jpq)).status == "enabled"
-          - (rabbitmq_service_facts | community.general.json_query(rabbitmq_service_jpq)).state == "running"
-        quiet: true
-      vars:
-        rabbitmq_service_jpq: 'ansible_facts.services.["rabbitmq-server.service"]|[0]'
+          - rabbitmq_service.status == "enabled"
+          - rabbitmq_service.state == "running"
+        quiet: "{% if ansible_verbosity == 0 %}true{% else %}false{% endif %}"
 
     - name: Check RabbitMQ cluster status
       ansible.builtin.command: rabbitmq-diagnostics cluster_status --formatter=json
@@ -52,12 +55,12 @@
     - name: Debug rabbitmq_cluster_status
       ansible.builtin.debug:
         var: rabbitmq_cluster_status
-        verbosity: 2
+        verbosity: "{% if ansible_check_mode | bool or ansible_diff_mode | bool %}1{% else %}2{% endif %}"
 
     - name: Debug rabbitmq_cluster_status.listeners
       ansible.builtin.debug:
         var: rabbitmq_cluster_status.listeners
-        verbosity: 1
+        verbosity: "{% if ansible_check_mode | bool or ansible_diff_mode | bool %}0{% else %}1{% endif %}"
 
     - name: Set a fact for the RabbitMQ node names
       ansible.builtin.set_fact:
@@ -66,7 +69,7 @@
     - name: Debug rabbitmq_node_names
       ansible.builtin.debug:
         var: rabbitmq_node_names
-        verbosity: 1
+        verbosity: "{% if ansible_check_mode | bool or ansible_diff_mode | bool %}0{% else %}1{% endif %}"
 
     - name: Check RabbitMQ environment
       ansible.builtin.command: rabbitmq-diagnostics environment --formatter=json
@@ -81,7 +84,7 @@
     - name: Debug rabbitmq_environment
       ansible.builtin.debug:
         var: rabbitmq_environment
-        verbosity: 2
+        verbosity: "{% if ansible_check_mode | bool or ansible_diff_mode | bool %}1{% else %}2{% endif %}"
 
     - name: Check RabbitMQ users
       ansible.builtin.command: rabbitmqctl list_users --formatter=json
@@ -92,7 +95,7 @@
     - name: Debug rabbitmq_list_users
       ansible.builtin.debug:
         var: rabbitmq_list_users_check
-        verbosity: 1
+        verbosity: "{% if ansible_check_mode | bool or ansible_diff_mode | bool %}0{% else %}1{% endif %}"
 
     - name: Set a fact for rabbitmqctl list_users
       ansible.builtin.set_fact:
@@ -101,7 +104,7 @@
     - name: Debug rabbitmq_list_users
       ansible.builtin.debug:
         var: rabbitmq_list_users
-        verbosity: 1
+        verbosity: "{% if ansible_check_mode | bool or ansible_diff_mode | bool %}0{% else %}1{% endif %}"
 
   tags:
     - rabbitmq

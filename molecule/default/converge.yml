@@ -16,20 +16,17 @@
     - localhost
   tasks:
 
-    - name: Debug ansible_effective_user_id
+    - name: Debug ansible_facts.effective_user_id
       ansible.builtin.debug:
-        var: ansible_effective_user_id
+        var: ansible_facts.effective_user_id
 
-    - name: Debug ansible_user_id
+    - name: Debug ansible_facts.user_id
       ansible.builtin.debug:
-        var: ansible_user_id
+        var: ansible_facts.user_id
 
-    - name: Debug ansible_user_dir
+    - name: Debug ansible_facts.user_dir
       ansible.builtin.debug:
-        var: ansible_user_dir
-
-    - name: Gather facts
-      ansible.builtin.setup:
+        var: ansible_facts.user_dir
 
     - name: Run hostname -f
       ansible.builtin.command: hostname -f
@@ -50,7 +47,7 @@
           - ip: 127.0.0.1
             hostname:
               - localhost
-          - ip: "{{ ansible_default_ipv4.address }}"
+          - ip: "{{ ansible_facts.default_ipv4.address }}"
             hostname:
               - "{{ molecule_hostname }}"
           - ip: ::1
@@ -84,12 +81,12 @@
           - username: ansible
             state: present
         rabbitmq_configuration:
-          listeners.tcp.local: "{{ ansible_default_ipv4.address }}:5672"
+          listeners.tcp.local: "{{ ansible_facts.default_ipv4.address }}:5672"
         rabbitmq_systemd_units:
           - name: epmd.service
             files:
               - path: /etc/systemd/system/epmd.service.d/override.conf
                 conf:
                   Service:
-                    Environment: 'ERL_EPMD_ADDRESS="{{ ansible_default_ipv4.address }}"'
+                    Environment: 'ERL_EPMD_ADDRESS="{{ ansible_facts.default_ipv4.address }}"'
 ...
