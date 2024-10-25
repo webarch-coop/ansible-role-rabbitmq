@@ -26,20 +26,20 @@
     - name: Gather service facts
       ansible.builtin.service_facts:
 
-    - name: Set a fact for the RabbitMQ service status
+    - name: Set a fact for the RabbitMQ systemd service
       ansible.builtin.set_fact:
-        rabbitmq_status: "{{ ansible_facts.services | community.general.json_query(rabbitmq_jpq.service) }}"
+        rabbitmq_systemd_service: "{{ ansible_facts.services | community.general.json_query(rabbitmq_jpq.service) }}"
 
-    - name: Debug RabbitMQ service status
+    - name: Debug RabbitMQ systemd service
       ansible.builtin.debug:
-        var: rabbitmq_service
+        var: rabbitmq_systemd_service
         verbosity: "{% if ansible_check_mode | bool or ansible_diff_mode | bool %}0{% else %}1{% endif %}"
 
     - name: Check that RabbitMQ is enabled and running
       ansible.builtin.assert:
         that:
-          - rabbitmq_service.status == "enabled"
-          - rabbitmq_service.state == "running"
+          - rabbitmq_systemd_service.status == "enabled"
+          - rabbitmq_systemd_service.state == "running"
         quiet: "{% if ansible_verbosity == 0 %}true{% else %}false{% endif %}"
 
     - name: Check RabbitMQ cluster status
