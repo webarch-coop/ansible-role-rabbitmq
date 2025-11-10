@@ -15,7 +15,6 @@
 
 - name: systemd
   src: https://git.coop/webarch/systemd.git
-  # version: 2.11.3  # systemd
-  version: main  # systemd
+  version: 2.11.4  # systemd
   scm: git
 ...
