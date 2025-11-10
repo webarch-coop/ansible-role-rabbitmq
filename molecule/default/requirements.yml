@@ -10,11 +10,11 @@
 ---
 - name: etchosts
   src: https://git.coop/webarch/etchosts.git
-  version: 1.4.0  # etchosts
+  version: 1.6.0  # etchosts
   scm: git
 
 - name: systemd
   src: https://git.coop/webarch/systemd.git
-  version: 2.0.2  # systemd
+  version: 2.11.3  # systemd
   scm: git
 ...

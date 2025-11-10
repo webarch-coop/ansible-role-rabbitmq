@@ -11,6 +11,6 @@
 # https://docs.ansible.com/ansible-lint/rules/default_rules.html
 skip_list:
   - key-order[task]
-var_naming_pattern: "^[rabbitmq|molecule]_?[0-9a-z_]*$"
+var_naming_pattern: "^[ansible|rabbitmq|molecule]_?[0-9a-z_]*$"
 # vim: syntax=yaml
 ...
