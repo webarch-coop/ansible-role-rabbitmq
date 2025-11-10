@@ -24,7 +24,7 @@
 
 - name: Debug rabbitmq-server.service
   ansible.builtin.debug:
-    var: ansible_facts.services | community.general.json_query(rabbitmq_jpq.service).state
+    msg: "{{ ansible_facts.services | community.general.json_query(rabbitmq_jpq.service) }}"
   listen: Restart rabbitmq
   tags:
     - rabbitmq
